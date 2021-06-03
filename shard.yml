@@ -1,0 +1,9 @@
+name: crystal-imgui-backends
+version: 0.1.0
+
+authors:
+  - Matthew Berry <me@mattrb.com>
+
+crystal: 1.0.0
+
+license: MIT
