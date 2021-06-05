@@ -14,4 +14,8 @@ extern "C" {
     void Crystal_ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data) {
         ImGui_ImplOpenGL3_RenderDrawData(draw_data);
     }
+
+    void Crystal_ImGui_ImplOpenGL3_Shutdown() {
+        ImGui_ImplOpenGL3_Shutdown();
+    }
 }

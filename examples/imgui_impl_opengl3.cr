@@ -86,3 +86,11 @@ until done
   LibImguiBackends.ImGui_ImplOpenGL3_RenderDrawData(ImGui.get_draw_data)
   LibSDL.gl_swap_window(window)
 end
+
+LibImguiBackends.ImGui_ImplOpenGL3_Shutdown
+LibImguiBackends.ImGui_ImplSDL2_Shutdown
+ImGui.destroy_context
+
+LibSDL.gl_delete_context(gl_context)
+window.finalize
+SDL.quit

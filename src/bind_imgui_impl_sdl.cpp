@@ -13,4 +13,8 @@ extern "C" {
     bool Crystal_ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event) {
         return ImGui_ImplSDL2_ProcessEvent(event);
     }
+
+    void Crystal_ImGui_ImplSDL2_Shutdown() {
+        ImGui_ImplSDL2_Shutdown();
+    }
 }
