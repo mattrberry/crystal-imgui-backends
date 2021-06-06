@@ -2,6 +2,7 @@ require "sdl"
 require "crystal-raw-gl/gl"
 require "imgui"
 require "../src/lib"
+require "../src/imgui_backends"
 
 SDL.init(SDL::Init::VIDEO | SDL::Init::AUDIO | SDL::Init::JOYSTICK)
 LibSDL.joystick_open 0
@@ -20,7 +21,7 @@ window = SDL::Window.new("imgui_impl_opengl3", 1280, 720, flags: SDL::Window::Fl
 gl_context = LibSDL.gl_create_context window
 LibSDL.gl_set_swap_interval(1)
 
-LibImguiBackends.gl3wInit
+LibImGuiBackends.gl3wInit
 
 ImGui.debug_check_version_and_data_layout(
   ImGui.get_version, *{
@@ -32,8 +33,8 @@ ImGui.create_context
 io = ImGui.get_io
 ImGui.style_colors_dark
 
-LibImguiBackends.ImGui_ImplSDL2_InitForOpenGL(window, gl_context)
-LibImguiBackends.ImGui_ImplOpenGL3_Init(glsl_version)
+ImGui::SDL2.init_for_opengl(window, gl_context)
+ImGui::OpenGL3.init(glsl_version)
 
 show_demo_window = true
 show_another_window = false
@@ -44,7 +45,7 @@ counter = 0
 done = false
 until done
   while event = SDL::Event.poll
-    # LibImguiBackends.ImGui_ImplSDL2_ProcessEvent(event)
+    # ImGui::SDL2.process_event(event)
     case event
     when SDL::Event::Quit then done = true
     when SDL::Event::Keyboard
@@ -54,8 +55,8 @@ until done
     end
   end
 
-  LibImguiBackends.ImGui_ImplOpenGL3_NewFrame
-  LibImguiBackends.ImGui_ImplSDL2_NewFrame(window)
+  ImGui::OpenGL3.new_frame
+  ImGui::SDL2.new_frame(window)
   ImGui.new_frame
 
   ImGui.show_demo_window(pointerof(show_demo_window)) if show_demo_window
@@ -83,12 +84,12 @@ until done
   GL.viewport(0, 0, io.display_size.x, io.display_size.y)
   GL.clear_color(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w)
   GL.clear(GL::COLOR_BUFFER_BIT)
-  LibImguiBackends.ImGui_ImplOpenGL3_RenderDrawData(ImGui.get_draw_data)
+  ImGui::OpenGL3.render_draw_data(ImGui.get_draw_data)
   LibSDL.gl_swap_window(window)
 end
 
-LibImguiBackends.ImGui_ImplOpenGL3_Shutdown
-LibImguiBackends.ImGui_ImplSDL2_Shutdown
+ImGui::OpenGL3.shutdown
+ImGui::SDL2.shutdown
 ImGui.destroy_context
 
 LibSDL.gl_delete_context(gl_context)
