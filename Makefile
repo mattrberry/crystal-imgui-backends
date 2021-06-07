@@ -58,12 +58,19 @@ cimgui_path: init_submodules
 	cmake --build cimgui
 	ln -f -s cimgui/cimgui.so libcimgui.so  # or .dylib on macOS
 
-.PHONY: init_submodules
-init_submodules: cimgui cimgui/imgui
+init_submodules: cimgui_src imgui_src
 
-.PHONY: cimgui/imgui
-cimgui/imgui:
-	git submodule update --init --recursive
+# Need to curl these rather than git submodule update since shards doesn't git clone
+
+.INTERMEDIATE: cimgui_src
+$(cimgui_src): cimgui_src ;
+cimgui_src:
+	curl -s -L https://github.com/cimgui/cimgui/archive/83f729b09313749a56948604c4bc13492ac47e00.tar.gz | tar -xz --strip-components=1 -C cimgui
+
+.INTERMEDIATE: imgui_src
+$(imgui_src): imgui_src ;
+imgui_src: cimgui_src
+	curl -s -L https://github.com/ocornut/imgui/archive/64aab8480a5643cec1880af17931963a90a8f990.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
 
 ########## Cleanup
 
