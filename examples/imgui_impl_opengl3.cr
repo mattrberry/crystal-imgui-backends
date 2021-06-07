@@ -2,7 +2,7 @@ require "sdl"
 require "crystal-raw-gl/gl"
 require "imgui"
 require "../src/lib"
-require "../src/imgui_backends"
+require "../src/imgui-backends"
 
 SDL.init(SDL::Init::VIDEO | SDL::Init::AUDIO | SDL::Init::JOYSTICK)
 LibSDL.joystick_open 0
