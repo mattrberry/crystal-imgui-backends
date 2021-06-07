@@ -28,7 +28,9 @@ else # Windows
     CFLAGS = $(CXXFLAGS)
 endif
 
-all: cimgui_path $(OBJS)
+all: cimgui_path checkpoint $(OBJS)
+
+checkpoint: $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 
 ########## Build rules
 
