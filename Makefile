@@ -16,7 +16,7 @@ ifeq ($(UNAME_S), Linux) # Linux
 	LIBS += -lGl -ldl `sdl2-config --libs`
 	CXXFLAGS += `sdl2-config --cflags`
 	CFLAGS = $(CXXFLAGS)
-else ($(UNAME_S), Darwin) # Mac
+else ifeq ($(UNAME_S), Darwin) # Mac
 	LIBS += -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo `sdl2-config --libs`
 	LIBS += -L/usr/local/lib -L/opt/local/lib
 	CXXFLAGS += `sdl2-config --cflags`
@@ -53,6 +53,7 @@ cimgui_path: init_submodules
 	cd cimgui; cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' .
 	cd cimgui; cmake --build .
 	cd cimgui; ln -f -s cimgui.so libcimgui.so  # or .dylib on macOS
+	ln -f -s cimgui/libcimgui.so libcimgui.so
 
 .PHONY: init_submodules
 init_submodules: cimgui cimgui/imgui
