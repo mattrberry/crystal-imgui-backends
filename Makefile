@@ -34,6 +34,11 @@ all: cimgui_path checkpoint $(OBJS)
 
 checkpoint: $(AFTER_CLONE)
 
+########## For Shard install
+
+shard: all
+	ln -s lib/imgui-backends/cimgui/cimgui.so ../..
+
 ########## Build rules
 
 %.o:%.cpp
