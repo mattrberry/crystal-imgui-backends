@@ -50,10 +50,9 @@ all: cimgui_path $(OBJS)
 ########## Setting up dependencies
 
 cimgui_path: init_submodules
-	cd cimgui; cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' .
-	cd cimgui; cmake --build .
-	cd cimgui; ln -f -s cimgui.so libcimgui.so  # or .dylib on macOS
-	ln -f -s cimgui/libcimgui.so libcimgui.so
+	cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' -S cimgui -B cimgui
+	cmake --build cimgui
+	ln -f -s cimgui/cimgui.so libcimgui.so  # or .dylib on macOS
 
 .PHONY: init_submodules
 init_submodules: cimgui cimgui/imgui
