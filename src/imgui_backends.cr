@@ -14,8 +14,9 @@ module ImGui
     end
 
     def process_event(event : SDL::Event) : Bool
-      # TODO: This does not work due to issues in the sdl bindings. Crystal doesn't properly handle union types.
-      LibImGuiBackends.ImGui_ImplSDL2_ProcessEvent(event)
+      # TODO: This is a temporary fix until https://github.com/ysbaddaden/sdl.cr/pull/42 is merged
+      ptr = (pointerof(event).as(Int32*) + 2).as(LibSDL::Event*)
+      LibImGuiBackends.ImGui_ImplSDL2_ProcessEvent(ptr)
     end
 
     def shutdown : Nil

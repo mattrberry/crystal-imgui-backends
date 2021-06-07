@@ -45,7 +45,7 @@ counter = 0
 done = false
 until done
   while event = SDL::Event.poll
-    # ImGui::SDL2.process_event(event)
+    ImGui::SDL2.process_event(event)
     case event
     when SDL::Event::Quit then done = true
     when SDL::Event::Keyboard

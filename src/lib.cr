@@ -9,7 +9,7 @@ lib LibImGuiBackends
   # SDL2
   fun ImGui_ImplSDL2_InitForOpenGL = Crystal_ImGui_ImplSDL2_InitForOpenGL(window : LibSDL::Window*, gl_context : LibSDL::GLContext) : Bool
   fun ImGui_ImplSDL2_NewFrame = Crystal_ImGui_ImplSDL2_NewFrame(window : LibSDL::Window*)
-  fun ImGui_ImplSDL2_ProcessEvent = Crystal_ImGui_ImplSDL2_ProcessEvent(event : Void*) : Bool
+  fun ImGui_ImplSDL2_ProcessEvent = Crystal_ImGui_ImplSDL2_ProcessEvent(event : LibSDL::Event*) : Bool
   fun ImGui_ImplSDL2_Shutdown = Crystal_ImGui_ImplSDL2_Shutdown
 
   # OpenGL3
