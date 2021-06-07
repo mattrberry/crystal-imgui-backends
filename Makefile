@@ -1,7 +1,6 @@
 IMGUI_DIR = cimgui/imgui
 SOURCES = src/bind_imgui_impl_sdl.cpp src/bind_imgui_impl_opengl3.cpp
-SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
-OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
+AFTER_CLONE = $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 UNAME_S := $(shell uname -s)
 
 CXXFLAGS = -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
@@ -9,8 +8,11 @@ CXXFLAGS += -g -Wall -Wformat
 CXXFLAGS += -fPIC -I.
 LIBS =
 
-SOURCES += $(IMGUI_DIR)/examples/libs/gl3w/GL/gl3w.c
+AFTER_CLONE += $(IMGUI_DIR)/examples/libs/gl3w/GL/gl3w.c
 CXXFLAGS += -I$(IMGUI_DIR)/examples/libs/gl3w -DIMGUI_IMPL_OPENGL_LOADER_GL3W
+
+SOURCES += $(AFTER_CLONE)
+OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 
 ifeq ($(UNAME_S), Linux) # Linux
 	LIBS += -lGl -ldl `sdl2-config --libs`
@@ -30,7 +32,7 @@ endif
 
 all: cimgui_path checkpoint $(OBJS)
 
-checkpoint: $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
+checkpoint: $(AFTER_CLONE)
 
 ########## Build rules
 
