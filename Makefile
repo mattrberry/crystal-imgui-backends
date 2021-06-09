@@ -37,7 +37,7 @@ checkpoint: $(AFTER_CLONE)
 ########## For Shard install
 
 shard: all
-	ln -s lib/imgui-backends/cimgui/cimgui.so ../..
+	ln -f -s lib/imgui-backends/cimgui/cimgui.so ../..
 
 ########## Build rules
 
@@ -61,7 +61,8 @@ shard: all
 cimgui_path: init_submodules
 	cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' -S cimgui -B cimgui
 	cmake --build cimgui
-	ln -f -s cimgui/cimgui.so libcimgui.so  # or .dylib on macOS
+	ln -f -s cimgui/cimgui.so cimgui.so # or .dylib on macOS
+	ln -f -s cimgui/cimgui.so libcimgui.so # or .dylib on macOS
 
 init_submodules: cimgui_src imgui_src
 
@@ -81,4 +82,6 @@ imgui_src: cimgui_src
 
 clean:
 	rm -f $(OBJS)
+	rm -f cimgui.so
+	rm -f libcimgui.so
 	git submodule foreach --recursive git reset --hard
