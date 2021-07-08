@@ -2,7 +2,6 @@ require "sdl"
 require "imgui"
 
 @[Link("gl")]
-@[Link("cimgui")]
 @[Link("stdc++")]
 @[Link(ldflags: "-L#{__DIR__}/../cimgui -L#{__DIR__}/.. #{__DIR__}/../*.o -Wl,-rpath .")]
 lib LibImGuiBackends
