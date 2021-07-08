@@ -1,5 +1,4 @@
 #include <cstdio>
-#include <GL/gl.h>
 #include "cimgui/imgui/backends/imgui_impl_opengl3.h"
 
 extern "C" {
