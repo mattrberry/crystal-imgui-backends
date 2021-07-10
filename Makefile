@@ -27,9 +27,9 @@ else ifeq ($(UNAME_S), Darwin) # Mac
 	CFLAGS = $(CXXFLAGS)
 	SHARED_LIB_EXT = dylib
 else # Windows
-    LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
-    CXXFLAGS += `pkg-config --cflags sdl2`
-    CFLAGS = $(CXXFLAGS)
+	LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
+	CXXFLAGS += `pkg-config --cflags sdl2`
+	CFLAGS = $(CXXFLAGS)
 endif
 
 all: cimgui_path checkpoint $(OBJS)
@@ -63,8 +63,8 @@ shard: all
 cimgui_path: init_submodules
 	cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' -S cimgui -B cimgui
 	cmake --build cimgui
-	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) cimgui.$(SHARED_LIB_EXT) # or .dylib on macOS
-	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) libcimgui.$(SHARED_LIB_EXT) # or .dylib on macOS
+	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) cimgui.$(SHARED_LIB_EXT)
+	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) libcimgui.$(SHARED_LIB_EXT)
 
 init_submodules: cimgui_src imgui_src
 
