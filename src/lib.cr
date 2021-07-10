@@ -3,6 +3,9 @@ require "imgui"
 
 @[Link("stdc++")]
 @[Link(ldflags: "-L#{__DIR__}/../cimgui -L#{__DIR__}/.. #{__DIR__}/../*.o -Wl,-rpath .")]
+{% if flag? :darwin %}
+  @[Link(framework: "CoreFoundation")]
+{% end %}
 lib LibImGuiBackends
   # SDL2
   fun ImGui_ImplSDL2_InitForOpenGL = Crystal_ImGui_ImplSDL2_InitForOpenGL(window : LibSDL::Window*, gl_context : LibSDL::GLContext) : Bool
