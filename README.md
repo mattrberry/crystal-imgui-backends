@@ -1,6 +1,6 @@
 # crystal-imgui-backends
 
-TODO: Write a description here
+This shard makes it easy to use ImGui backends from Crystal.
 
 ## Installation
 
@@ -8,8 +8,12 @@ TODO: Write a description here
 
    ```yaml
    dependencies:
-     crystal-imgui-backends:
-       github: your-github-user/crystal-imgui-backends
+    imgui-backends:
+      github: mattrberry/crystal-imgui-backends
+      tag: v1.86 # select your version here by git tag
+    imgui: # chances are you want to include imgui as well
+      github: oprypin/crystal-imgui
+      tag: v1.86 # should match version used above
    ```
 
 2. Run `shards install`
@@ -17,18 +21,33 @@ TODO: Write a description here
 ## Usage
 
 ```crystal
-require "crystal-imgui-backends"
+require "imgui-backends"
+require "imgui-backends/lib"
+
+# ImGui::<backend name>::method()
+ImGui::OpenGL3.new_frame
+ImGui::SDL2.new_frame(@window)
 ```
 
-TODO: Write usage instructions here
+All backends are under a module sharing their name (like "SDL2" or :OpenGL3"), which is in turn under the module "ImGui".
+
+For a minimal example, run the following:
+
+```bash
+shards install
+make shard
+crystal examples/imgui_impl_opengl3.cr
+```
+
+For a concrete example using this shard, see https://github.com/mattrberry/crab. The `make shard` is run as a postinstall step when this shard is installed, so ImGui links are generated automatically.
 
 ## Development
 
-TODO: Write development instructions here
+Development is currently a manual process, and new backends are added as necessary. If you would like to use a backend or method that's not currently supported, you're welcome to add it following the convention in the src/ dir. If you add a new backend, it would be nice to create an example using that backend under examples/ as well.
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/crystal-imgui-backends/fork>)
+1. Fork it (<https://github.com/mattrberry/crystal-imgui-backends/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -36,4 +55,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Matthew Berry](https://github.com/your-github-user) - creator and maintainer
+- [Matthew Berry](https://github.com/mattrberry) - creator and maintainer
