@@ -18,7 +18,4 @@ lib LibImGuiBackends
   fun ImGui_ImplOpenGL3_NewFrame = Crystal_ImGui_ImplOpenGL3_NewFrame
   fun ImGui_ImplOpenGL3_RenderDrawData = Crystal_ImGui_ImplOpenGL3_RenderDrawData(draw_data : Void*)
   fun ImGui_ImplOpenGL3_Shutdown = Crystal_ImGui_ImplOpenGL3_Shutdown
-
-  # Misc
-  fun gl3wInit
 end

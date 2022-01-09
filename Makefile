@@ -8,9 +8,6 @@ CXXFLAGS += -g -Wall -Wformat
 CXXFLAGS += -fPIC -I.
 LIBS =
 
-AFTER_CLONE += $(IMGUI_DIR)/examples/libs/gl3w/GL/gl3w.c
-CXXFLAGS += -I$(IMGUI_DIR)/examples/libs/gl3w -DIMGUI_IMPL_OPENGL_LOADER_GL3W
-
 SOURCES += $(AFTER_CLONE)
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 
@@ -52,9 +49,6 @@ shard: all
 %.o:$(IMGUI_DIR)/backends/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/examples/libs/gl3w/GL/%.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
 %.o:src/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
@@ -73,12 +67,12 @@ init_submodules: cimgui_src imgui_src
 .INTERMEDIATE: cimgui_src
 $(cimgui_src): cimgui_src ;
 cimgui_src:
-	curl -s -L https://github.com/cimgui/cimgui/archive/83f729b09313749a56948604c4bc13492ac47e00.tar.gz | tar -xz --strip-components=1 -C cimgui
+	curl -s -L https://github.com/cimgui/cimgui/archive/05d7db048c06c57baba5296840d5a22dc77de78e.tar.gz | tar -xz --strip-components=1 -C cimgui
 
 .INTERMEDIATE: imgui_src
 $(imgui_src): imgui_src ;
 imgui_src: cimgui_src
-	curl -s -L https://github.com/ocornut/imgui/archive/64aab8480a5643cec1880af17931963a90a8f990.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
+	curl -s -L https://github.com/ocornut/imgui/archive/55d35d8387c15bf0cfd71861df67af8cfbda7456.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
 
 ########## Cleanup
 

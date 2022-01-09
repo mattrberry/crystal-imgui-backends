@@ -21,8 +21,6 @@ window = SDL::Window.new("imgui_impl_opengl3", 1280, 720, flags: SDL::Window::Fl
 gl_context = LibSDL.gl_create_context window
 LibSDL.gl_set_swap_interval(1)
 
-LibImGuiBackends.gl3wInit
-
 ImGui.debug_check_version_and_data_layout(
   ImGui.get_version, *{
   sizeof(LibImGui::ImGuiIO), sizeof(LibImGui::ImGuiStyle), sizeof(ImGui::ImVec2),
