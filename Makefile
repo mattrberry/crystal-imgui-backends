@@ -67,12 +67,12 @@ init_submodules: cimgui_src imgui_src
 .INTERMEDIATE: cimgui_src
 $(cimgui_src): cimgui_src ;
 cimgui_src:
-	curl -s -L https://github.com/cimgui/cimgui/archive/05d7db048c06c57baba5296840d5a22dc77de78e.tar.gz | tar -xz --strip-components=1 -C cimgui
+	curl -s -L https://github.com/cimgui/cimgui/archive/1.86.tar.gz | tar -xz --strip-components=1 -C cimgui
 
 .INTERMEDIATE: imgui_src
 $(imgui_src): imgui_src ;
 imgui_src: cimgui_src
-	curl -s -L https://github.com/ocornut/imgui/archive/55d35d8387c15bf0cfd71861df67af8cfbda7456.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
+	curl -s -L https://github.com/ocornut/imgui/archive/v1.86.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
 
 ########## Cleanup
 
