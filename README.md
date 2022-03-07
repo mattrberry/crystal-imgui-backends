@@ -35,7 +35,7 @@ For a minimal example, run the following:
 
 ```bash
 shards install
-make shard
+make
 crystal examples/imgui_impl_opengl3.cr
 ```
 

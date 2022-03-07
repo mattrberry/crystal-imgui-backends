@@ -36,7 +36,7 @@ checkpoint: $(AFTER_CLONE)
 ########## For Shard install
 
 shard: all
-	ln -f -s lib/imgui-backends/cimgui/cimgui.$(SHARED_LIB_EXT) ../..
+	ln -f -s lib/imgui-backends/*.$(SHARED_LIB_EXT) ../.. # stick shared libraries in requiring shard's root
 
 ########## Build rules
 
@@ -55,8 +55,7 @@ shard: all
 ########## Setting up dependencies
 
 cimgui_path: init_submodules
-	cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' -S cimgui -B cimgui
-	cmake --build cimgui
+	cd cimgui && make
 	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) cimgui.$(SHARED_LIB_EXT)
 	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) libcimgui.$(SHARED_LIB_EXT)
 
