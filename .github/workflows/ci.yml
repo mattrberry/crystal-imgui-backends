@@ -3,7 +3,7 @@ name: CI
 on:
   push:
   pull_request:
-    branches: [master]
+    branches: [master, ci_test]
 
 jobs:
   build:
@@ -48,7 +48,19 @@ jobs:
 
       - name: Install shards
         run: shards install
+
       - name: Build
         run: make
+
+      - name: Test run
+        run: |
+          timeout 5s crystal examples/imgui_impl_opengl3.cr
+          ret=$?
+          if [ $ret -eq 124 ]; then
+            exit 0
+          else
+            exit $ret
+          fi
+
       # - name: Run tests
       #   run: crystal spec
