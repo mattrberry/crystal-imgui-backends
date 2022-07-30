@@ -1,82 +1,67 @@
-IMGUI_DIR = cimgui/imgui
-SOURCES = src/bind_imgui_impl_sdl.cpp src/bind_imgui_impl_opengl3.cpp
-AFTER_CLONE = $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
-UNAME_S := $(shell uname -s)
+imgui := cimgui/imgui
+backends := $(imgui)/backends
+supported_backends := sdl opengl3
+supported_backends_full := $(addprefix imgui_impl_, $(addsuffix .o, $(supported_backends)))
 
-CXXFLAGS = -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
-CXXFLAGS += -g -Wall -Wformat
-CXXFLAGS += -fPIC -I.
-LIBS =
+cimgui_src := cimgui/cimgui.cpp cimgui/cimgui.h
+imgui_src := $(imgui)/imgui.h $(imgui)/imgui.cpp $(imgui)/imgui_draw.cpp $(imgui)/imgui_widgets.cpp $(imgui)/imgui_tables.cpp $(imgui)/imgui_demo.cpp
+bind_objs := $(addprefix src/bind_, $(supported_backends_full)) # all bindings must be named bind_imgui_impl_<backend>.o
+backend_objs := $(addprefix $(backends)/, $(supported_backends_full)) # add imgui backend sources
+obj_files := imgui.o imgui_draw.o imgui_widgets.o imgui_tables.o imgui_demo.o cimgui.o
+obj_files += $(bind_objs) $(backend_objs)
 
-SOURCES += $(AFTER_CLONE)
-OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
-
-ifeq ($(UNAME_S), Linux) # Linux
-	LIBS += -lGl -ldl `sdl2-config --libs`
-	CXXFLAGS += `sdl2-config --cflags`
-	CFLAGS = $(CXXFLAGS)
-	SHARED_LIB_EXT = so
-else ifeq ($(UNAME_S), Darwin) # Mac
-	LIBS += -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo `sdl2-config --libs`
-	LIBS += -L/usr/local/lib -L/opt/local/lib
-	CXXFLAGS += `sdl2-config --cflags`
-	CXXFLAGS += -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include
-	CFLAGS = $(CXXFLAGS)
-	SHARED_LIB_EXT = dylib
-else # Windows
-	LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
-	CXXFLAGS += `pkg-config --cflags sdl2`
-	CFLAGS = $(CXXFLAGS)
+ifeq ($(shell uname -s),Darwin)
+	opengl := -framework OpenGL
+else
+	opengl := -lGL
 endif
 
-all: cimgui_path checkpoint $(OBJS)
+libcimgui.so: $(obj_files)
+	$(CXX) -std=c++11 -fPIC -shared $(opengl) -o $@ $(obj_files)
 
-checkpoint: $(AFTER_CLONE)
+# stick shared libraries in requiring shard's root
+shard: libcimgui.so
+	ln -f -s lib/imgui-backends/libcimgui.so ../..
 
-########## For Shard install
+config_flags := -std=c++11 -fPIC -I. -I$(imgui) -I$(backends)
 
-shard: all
-	ln -f -s lib/imgui-backends/*.$(SHARED_LIB_EXT) ../.. # stick shared libraries in requiring shard's root
+%.o: $(imgui)/%.cpp $(imgui)/imgui.h
+	@echo Building $@
+	$(CXX) $(config_flags) $(CXXFLAGS) -o $@ -c $<
 
-########## Build rules
+cimgui.o: $(cimgui_src) $(imgui)/imgui.h
+	@echo Building cimgui.o
+	$(CXX) $(config_flags) $(CXXFLAGS) -o $@ -c $<
 
-%.o:%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+src/bind_%.o: src/bind_%.cpp $(imgui)/imgui.h
+	@echo Building binding $@
+	$(CXX) $(config_flags) $(CXXFLAGS) -o $@ -c $<
 
-%.o:$(IMGUI_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+$(backends)/%.o: $(backends)/%.cpp $(imgui)/imgui.h
+	@echo Building backend $@
+	$(CXX) $(config_flags) $(CXXFLAGS) `sdl2-config --cflags` -o $@ -c $<
 
-%.o:$(IMGUI_DIR)/backends/%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+# cimgui/imgui/backends/imgui_impl_sdl.o: cimgui/imgui/backends/imgui_impl_sdl.cpp $(imgui)/imgui.h
+# 	@echo Building backend $@   ":("
+# 	$(CXX) $(config_flags) $(CXXFLAGS) `sdl2-config --cflags` -o $@ -c $<
 
-%.o:src/%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+# cimgui/imgui/backends/imgui_impl_opengl3.o: cimgui/imgui/backends/imgui_impl_opengl3.cpp $(imgui)/imgui.h
+# 	@echo Building backend $@   ":("
+# 	$(CXX) $(config_flags) $(CXXFLAGS) `sdl2-config --cflags` -o $@ -c $<
 
-########## Setting up dependencies
-
-cimgui_path: init_submodules
-	cd cimgui && make
-	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) cimgui.$(SHARED_LIB_EXT)
-	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) libcimgui.$(SHARED_LIB_EXT)
-
-init_submodules: cimgui_src imgui_src
-
-# Need to curl these rather than git submodule update since shards doesn't git clone
+.PRECIOUS: $(cimgui_src) $(imgui_src)
 
 .INTERMEDIATE: cimgui_src
 $(cimgui_src): cimgui_src ;
 cimgui_src:
-	curl -s -L https://github.com/cimgui/cimgui/archive/1.86.tar.gz | tar -xz --strip-components=1 -C cimgui
+	curl -s -L https://github.com/cimgui/cimgui/archive/1.87.tar.gz | tar -xz --strip-components=1 -C cimgui
 
 .INTERMEDIATE: imgui_src
 $(imgui_src): imgui_src ;
 imgui_src: cimgui_src
-	curl -s -L https://github.com/ocornut/imgui/archive/v1.86.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
+	curl -s -L https://github.com/ocornut/imgui/archive/v1.87.tar.gz | tar -xz --strip-components=1 -C $(imgui)
 
-########## Cleanup
-
+.PHONY: clean
 clean:
-	rm -f $(OBJS)
-	rm -f cimgui.$(SHARED_LIB_EXT)
-	rm -f libcimgui.$(SHARED_LIB_EXT)
+	rm -f $(obj_files) *.o *.obj *.so *.lib
 	git submodule foreach --recursive git reset --hard

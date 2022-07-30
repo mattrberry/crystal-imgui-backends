@@ -1,10 +1,10 @@
 require "sdl"
 require "imgui"
 
-@[Link("stdc++")]
-@[Link(ldflags: "-L#{__DIR__}/../cimgui -L#{__DIR__}/.. #{__DIR__}/../*.o -Wl,-rpath .")]
-{% if flag? :darwin %}
-  @[Link(framework: "CoreFoundation")]
+@[Link("cimgui")]
+@[Link(ldflags: "-Wl,-rpath .")] # controversial, but means users don't need to set LD_LIBRARY_PATH
+{% unless flag?(:win32) %}
+  @[Link(ldflags: "-L#{__DIR__}/..")]
 {% end %}
 lib LibImGuiBackends
   # SDL2

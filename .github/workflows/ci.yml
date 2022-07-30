@@ -48,7 +48,9 @@ jobs:
 
       - name: Install shards
         run: shards install
+
       - name: Build
-        run: make
-      # - name: Run tests
-      #   run: crystal spec
+        run: make || make
+
+      - name: Run example
+        run: crystal examples/test.cr

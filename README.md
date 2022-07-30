@@ -10,10 +10,10 @@ This shard makes it easy to use ImGui backends from Crystal.
    dependencies:
     imgui-backends:
       github: mattrberry/crystal-imgui-backends
-      tag: v1.86 # select your version here by git tag
+      tag: v1.87 # select your version here by git tag
     imgui: # chances are you want to include imgui as well
       github: oprypin/crystal-imgui
-      tag: v1.86 # should match version used above
+      tag: v1.87 # should match version used above
    ```
 
 2. Run `shards install`
@@ -29,7 +29,7 @@ ImGui::OpenGL3.new_frame
 ImGui::SDL2.new_frame(@window)
 ```
 
-All backends are under a module sharing their name (like "SDL2" or :OpenGL3"), which is in turn under the module "ImGui".
+All backends are under a module sharing their name (like "SDL2" or OpenGL3"), which is in turn under the module "ImGui".
 
 For a minimal example, run the following:
 
@@ -56,3 +56,7 @@ Development is currently a manual process, and new backends are added as necessa
 ## Contributors
 
 - [Matthew Berry](https://github.com/mattrberry) - creator and maintainer
+
+## Credit
+- Oleh Pyrpin: This shard is **heavily** inspired by https://github.com/oprypin/crystal-imgui-sfml
+- Omar Cornut: The example code is translated nearly directly from https://github.com/ocornut/imgui

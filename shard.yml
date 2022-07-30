@@ -13,7 +13,7 @@ dependencies:
 development_dependencies:
   imgui:
     github: oprypin/crystal-imgui
-    tag: v1.86
+    tag: v1.87
 
 scripts:
   postinstall: make shard
