@@ -1,5 +1,6 @@
 require "sdl"
 require "imgui"
+require "./lib"
 
 module ImGui
   module SDL2
