@@ -10,10 +10,10 @@ This shard makes it easy to use ImGui backends from Crystal.
    dependencies:
     imgui-backends:
       github: mattrberry/crystal-imgui-backends
-      tag: v1.87 # select your version here by git tag
+      tag: v1.88 # select your version here by git tag
     imgui: # chances are you want to include imgui as well
       github: oprypin/crystal-imgui
-      tag: v1.87 # should match version used above
+      tag: v1.88 # should match version used above
    ```
 
 2. Run `shards install`

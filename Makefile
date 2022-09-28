@@ -3,7 +3,7 @@ SOURCES = src/bind_imgui_impl_sdl.cpp src/bind_imgui_impl_opengl3.cpp
 AFTER_CLONE = $(IMGUI_DIR)/backends/imgui_impl_sdl.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 UNAME_S := $(shell uname -s)
 
-CXXFLAGS = -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
+CXXFLAGS = -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
 CXXFLAGS += -g -Wall -Wformat
 CXXFLAGS += -fPIC -I.
 LIBS =
@@ -55,7 +55,7 @@ shard: all
 ########## Setting up dependencies
 
 cimgui_path: init_submodules
-	cd cimgui && make
+	cd cimgui && cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' . && cmake --build .
 	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) cimgui.$(SHARED_LIB_EXT)
 	ln -f -s cimgui/cimgui.$(SHARED_LIB_EXT) libcimgui.$(SHARED_LIB_EXT)
 
@@ -66,12 +66,12 @@ init_submodules: cimgui_src imgui_src
 .INTERMEDIATE: cimgui_src
 $(cimgui_src): cimgui_src ;
 cimgui_src:
-	curl -s -L https://github.com/cimgui/cimgui/archive/1.87.tar.gz | tar -xz --strip-components=1 -C cimgui
+	curl -s -L https://github.com/cimgui/cimgui/archive/1.88.tar.gz | tar -xz --strip-components=1 -C cimgui
 
 .INTERMEDIATE: imgui_src
 $(imgui_src): imgui_src ;
 imgui_src: cimgui_src
-	curl -s -L https://github.com/ocornut/imgui/archive/v1.87.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
+	curl -s -L https://github.com/ocornut/imgui/archive/v1.88.tar.gz | tar -xz --strip-components=1 -C cimgui/imgui
 
 ########## Cleanup
 

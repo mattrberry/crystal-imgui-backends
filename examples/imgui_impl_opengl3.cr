@@ -78,24 +78,23 @@ until done
   ImGui.show_demo_window(pointerof(show_demo_window)) if show_demo_window
 
   # 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-  ImGui.begin("Hello, world!")
-  ImGui.text("This is some useful text.")
-  ImGui.checkbox("Demo Window", pointerof(show_demo_window))
-  ImGui.checkbox("Another Window", pointerof(show_another_window))
-  ImGui.slider_float("float", pointerof(f).as(Float32*), 0.0_f32, 1.0_f32)
-  ImGui.color_edit3("clear color", pointerof(clear_color))
-  counter += 1 if ImGui.button("Button")
-  ImGui.same_line
-  ImGui.text("counter = #{counter}")
-  ImGui.text("Application average #{(1000 / io.framerate).format(decimal_places: 3)} ms/frame (#{io.framerate.format(decimal_places: 1)} FPS)")
-  ImGui.end
-
+  ImGui.window("Hello, world!") do
+    ImGui.text("This is some useful text.")
+    ImGui.checkbox("Demo Window", pointerof(show_demo_window))
+    ImGui.checkbox("Another Window", pointerof(show_another_window))
+    ImGui.slider_float("float", pointerof(f).as(Float32*), 0.0_f32, 1.0_f32)
+    ImGui.color_edit3("clear color", pointerof(clear_color))
+    counter += 1 if ImGui.button("Button")
+    ImGui.same_line
+    ImGui.text("counter = #{counter}")
+    ImGui.text("Application average #{(1000 / io.framerate).format(decimal_places: 3)} ms/frame (#{io.framerate.format(decimal_places: 1)} FPS)")
+  end
   # 3. Show another simple window.
   if show_another_window
-    ImGui.begin("Another Window", pointerof(show_another_window))
-    ImGui.text("Hello from another window!")
-    show_another_window = false if ImGui.button("Close Me")
-    ImGui.end
+    ImGui.window("Another Window", pointerof(show_another_window)) do
+      ImGui.text("Hello from another window!")
+      show_another_window = false if ImGui.button("Close Me")
+    end
   end
 
   # Rendering
